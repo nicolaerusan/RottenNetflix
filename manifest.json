@@ -1,0 +1,17 @@
+{
+  "name": "Rotten Netflix",
+  "version": "0.2",
+  "description": "Overlays Rotten Tomato reviews when browsing Netflix.",
+  "content_scripts": [
+	{ "matches": ["http://*.netflix.com/*"], "js": ["jquery-1.7.1.min.js", "rotten_netflix.js"], "css": ["rotten_netflix.css"] }
+  ],
+  "permissions": [
+    "http://api.rottentomatoes.com/",
+    "http://www.rottentomatoes.com/"
+  ],
+  "icons":{
+  		   "16": "icon16.png",
+           "48": "icon48.png",
+          "128": "icon128.png"
+  }
+}
