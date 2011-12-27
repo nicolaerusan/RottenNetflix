@@ -1,0 +1,9 @@
+ROTTEN NETFLIX
+
+Wrote this Chrome and Safari Extension to overlay Rotten Tomatoes reviews on top of Netflix.
+
+Wanted to also give credit to to Matt Blodgett (http://www.mattblodgett.com/2009/07/rotten-tomatoes-netflix-greasemonkey.html). 
+He had the closest thing to what I was looking for (in that case it was a greasemonkey script that is a bit outdated). 
+I re-used the portion of his code that translates movie names from Netflix, to the corresponding RT URL.
+
+If you have questions contact me @nicolaerusan.
