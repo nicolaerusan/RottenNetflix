@@ -1,10 +1,15 @@
 .rt_rating{
-	font-family:Helvetica Neue Light, Helvetica Neue;
-	padding-top:5px;
-	font-size:18px;
-	text-decoration:none;
-	color:black;
-	display:block;
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	left: 0px;
+	background-color: rgba(0, 0, 0, 0.5);
+	width: 100%;
+	font-size: 14px;
+	padding: 2px;
+	box-sizing: border-box;
+	color: white;
+	z-index: 13;
 }
 
 .rt_rating:hover{
@@ -21,12 +26,14 @@
 
 .rt_fresh .icon{
 	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
-	background-position: -256px -144px;
+	background-position: -256px -142px;
 	
 }
 
 
 .rt_rotten .icon{
 	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
-	background-position: -272px -144px;
+	background-position: -272px -142px;
 }
+
+.boxShot {position: relative;}
