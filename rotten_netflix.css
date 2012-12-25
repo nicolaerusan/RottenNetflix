@@ -5,16 +5,14 @@
 	left: 0px;
 	background-color: rgba(0, 0, 0, 0.5);
 	width: 100%;
-	font-size: 14px;
+	font-size: 12px;
 	padding: 2px;
 	box-sizing: border-box;
 	color: white;
 	z-index: 13;
 }
 
-a.rt_rating:hover{
-	text-decoration:underline;	
-}
+a.rt_rating:hover {text-decoration: none;}
 
 .rt_na {
 	font-size: 9px;
@@ -22,28 +20,34 @@ a.rt_rating:hover{
 	color:#AAA;
 }
 
+.rt_rating span.na {display: none}
+.icon.rt_na {display:none!important;}
+
+.rt_rating span {margin-right: 15px;}
+
 .rt_rating .icon{
 	display:inline-block;
 	height:16px;
 	width:16px;
 	margin-right:5px;
 }
-.rt_fresh .icon{
+.rt_fresh.icon{
 	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
 	background-position: -256px -142px;
 	
 }
 
-
-.rt_rotten .icon{
+.rt_rotten.icon{
 	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
 	background-position: -272px -142px;
 }
 
-.icon.audience {
+.icon.audience.rt_fresh {
 	background-position: -286px -143px;
-	margin-left: 15px;
 }
 
+.icon.audience.rt_rotten {
+	background-position: -207px -142px;
+}
 
 .boxShot {position: relative;}

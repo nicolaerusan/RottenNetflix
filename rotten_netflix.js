@@ -1,5 +1,6 @@
 var apiKey = "9udjy8ah39qedyb6eb6rd4p6"; // not used, but could use as a fallback.
 var bindElement; // depending on the page, append the rotten tomatoes info to different elem.
+var hideRotten = false;
 
 $.fn.isOnScreen = function(){
     
@@ -83,8 +84,6 @@ function computeRatings(){
                     movieTitle = getURLParameter('t', movieTitle);
                     var movieUrl = convertTitleToUrl(movieTitle);
                     
-                    console.log(movieUrl);
-
                     $.ajax({
                         url: movieUrl,
                         dataType: 'json',
@@ -95,24 +94,39 @@ function computeRatings(){
                                 var audience_rating = data.movies[0].ratings.audience_score;
                                 var rtLink = data.movies[0].links.alternate;
 
-                                if (rating > 70) {
+                                if (rating > 60) {
                                     var ratingClass = 'fresh';
                                 } else if (rating > 0){
                                     var ratingClass = 'rotten';
                                 } else {
                                     var ratingClass = 'na';
                                 }
+                                
+                                if (audience_rating > 60) {
+                                    var audienceClass = 'fresh';
+                                } else if (audience_rating > 0){
+                                    var audienceClass = 'rotten';
+                                } else {
+                                    var audienceClass = 'na';
+                                }
+
+                                $parentEl.addClass(ratingClass);
 
                                 var $ratingEl = $(
-                                        "<a href='"+ rtLink +"' class='rt_rating rt_" + ratingClass + "'>" + 
-                                        "<div class='icon'></div>"+ rating + 
-                                        "<div class='icon audience'></div>" + audience_rating + "</a>"
+                                        "<a href='"+ rtLink +"' class='rt_rating'>" + 
+                                        "<div class='icon rt_" + ratingClass + "'></div><span class="+ratingClass+">"+ rating +"%</span>"  + 
+                                        "<div class='icon audience rt_" + audienceClass + "'></div>" + audience_rating +"%"+ "</a>"
                                     );
                                 bindElementTemp.append($ratingEl);
                                 $ratingEl.hide().fadeIn(1000);
                                 
-                                if ($ratingEl.hasClass('rt_na')) {
-                                    $ratingEl.text('no info available');
+                                // if ($ratingEl.hasClass('rt_na')) {
+                                //     $ratingEl.text('no info available');
+                                // }
+                                if (hideRotten) {
+                                    if ($parentEl.hasClass('rotten')) {
+                                        $parentEl.fadeOut(2000)
+                                    }
                                 }
                             }
                         }
@@ -150,7 +164,7 @@ $(function(){
     
     computeRatings();
 
-    window.setInterval(computeRatings, 2000);
+    window.setInterval(computeRatings, 3000);
     
     
     // handle lazy loading of moviesactivated by click on next arrows for Suggested page.   
