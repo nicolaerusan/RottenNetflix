@@ -42,21 +42,17 @@ function replaceAmpersands(title) {
   return title.replace(/&/g, "and");
 }
 
-
 function removeExtraneousCharacters(title) {
   return title.replace(/('|,|\.|!|\?|\/|:|\[|\]|\(|\))/g, "");
 }
-
 
 function removeLeadingArticle(title) {
   return title.replace(/^(the|a|an)_/, "");
 }
 
-
 function replaceAccentedLetters(title) {
   return title.replace(/(é|è)/g, "e");
 }
-
 
 function deSrcHTML(html) {
   return html.replace(/src/g, "foo");
@@ -113,16 +109,14 @@ function computeRatings(){
                                 $parentEl.addClass(ratingClass);
 
                                 var $ratingEl = $(
-                                        "<a href='"+ rtLink +"' class='rt_rating'>" + 
+                                        "<a target='_blank' href='"+ rtLink +"' class='rt_rating'>" + 
                                         "<div class='icon rt_" + ratingClass + "'></div><span class="+ratingClass+">"+ rating +"%</span>"  + 
                                         "<div class='icon audience rt_" + audienceClass + "'></div>" + audience_rating +"%"+ "</a>"
                                     );
                                 bindElementTemp.append($ratingEl);
                                 $ratingEl.hide().fadeIn(1000);
                                 
-                                // if ($ratingEl.hasClass('rt_na')) {
-                                //     $ratingEl.text('no info available');
-                                // }
+                                // TODO: add the ability to hide rotten movies
                                 if (hideRotten) {
                                     if ($parentEl.hasClass('rotten')) {
                                         $parentEl.fadeOut(2000)
@@ -165,7 +159,6 @@ $(function(){
     computeRatings();
 
     window.setInterval(computeRatings, 3000);
-    
     
     // handle lazy loading of moviesactivated by click on next arrows for Suggested page.   
     $('.qSlider-navNext, qSlider-navNext').click(function(){
