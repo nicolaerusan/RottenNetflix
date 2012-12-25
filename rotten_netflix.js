@@ -64,22 +64,29 @@ function getURLParameter(name, url) {
 
 function computeRatings(){
     $('.boxShot').each(function(){
-        var movieLink = $(this).find('a');
+        var $movieLink = $(this).find('a');
         var $parentEl = $(this).parent();
         var $parentElClass = $parentEl.attr('class');
 
+        //only poll rotten tomatoes if the element is on screen
         if ($parentEl.isOnScreen()) {
 
-            //make sure its a movie and hasnt been polled
+            //make sure its a movie and hasnt already been polled
             if (!$parentElClass.match('TV') && !$parentEl.hasClass('polled')) {
-            
-                var bindElementTemp = movieLink.closest(bindElement);
+                
+                var bindElementTemp = $movieLink.closest(bindElement);
                 
                 if (bindElementTemp.children('.rt_rating').length < 1) {     
-                    var movieTitle = movieLink.attr('href');
-                    movieTitle = getURLParameter('t', movieTitle);
-                    var movieUrl = convertTitleToUrl(movieTitle);
                     
+                    if ($(this).hasClass('boxShot-sm')) {
+                        var movieTitle = $movieLink.find('img').attr('alt');
+                        var movieUrl = convertTitleToUrl(movieTitle);
+                    } else {
+                        var movieTitle = $movieLink.attr('href');
+                        movieTitle = getURLParameter('t', movieTitle);
+                        var movieUrl = convertTitleToUrl(movieTitle);
+                    }
+
                     $.ajax({
                         url: movieUrl,
                         dataType: 'json',

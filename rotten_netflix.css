@@ -1,3 +1,5 @@
+.boxShot {position: relative;}
+
 .rt_rating{
 	position: absolute;
 	z-index: 1;
@@ -12,7 +14,7 @@
 	z-index: 13;
 }
 
-a.rt_rating:hover {text-decoration: none;}
+.rt_rating:hover {text-decoration: none!important;}
 
 .rt_na {
 	font-size: 9px;
@@ -35,18 +37,19 @@ a.rt_rating:hover {text-decoration: none;}
 	background-position: -256px -142px;
 	
 }
-
 .rt_rotten.icon{
 	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
 	background-position: -272px -142px;
 }
-
 .icon.audience.rt_fresh {
 	background-position: -286px -143px;
 }
-
 .icon.audience.rt_rotten {
 	background-position: -207px -142px;
 }
-
-.boxShot {position: relative;}
+/* Styling for small Box Shot */
+.boxShot-sm .rt_rating {
+	font-size: 9px;
+	bottom: 4px;
+}
+.boxShot-sm .rt_rating span {margin-right: 5px;}
