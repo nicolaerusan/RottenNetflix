@@ -21,29 +21,21 @@ $.fn.isOnScreen = function(){
 };
 
 function convertTitleToUrl(title) {
-  var rtUrl = "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=" +apiKey;
+  var rtUrl = "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=" + apiKey;
   title = encodeURI(title);
   title = removeSubtitles(title);
-  // title = title.toLowerCase();
-  // title = replaceWordSeparators(title);
   title = replaceAmpersands(title);
   title = removeExtraneousCharacters(title);
+  title = title.toLowerCase();
   title = removeLeadingArticle(title);
   title = replaceAccentedLetters(title);
   rtUrl += "&q=" + title + "&page_limit=1";
-  console.log(rtUrl);
   return rtUrl;
 }
 
 function removeSubtitles(title) {
   return title.replace(/(: Collector's Series|: Collector's Edition|: Director's Cut|: Special Edition)/, "");
 }
-
-
-function replaceWordSeparators(title) {
-  return title.replace(/( |-)/g, "_");
-}
-
 
 function replaceAmpersands(title) {
   return title.replace(/&/g, "and");
@@ -69,9 +61,13 @@ function deSrcHTML(html) {
   return html.replace(/src/g, "foo");
 }
 
+function getURLParameter(name, url) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url)||[,""])[1].replace(/\+/g, '%20'))||null;
+}
+
 function computeRatings(){
     $('.boxShot').each(function(){
-        var imageEl = $(this).find('.boxShotImg');
+        var movieLink = $(this).find('a');
         var $parentEl = $(this).parent();
         var $parentElClass = $parentEl.attr('class');
 
@@ -80,28 +76,43 @@ function computeRatings(){
             //make sure its a movie and hasnt been polled
             if (!$parentElClass.match('TV') && !$parentEl.hasClass('polled')) {
             
-                var bindElementTemp = imageEl.closest(bindElement);
+                var bindElementTemp = movieLink.closest(bindElement);
                 
                 if (bindElementTemp.children('.rt_rating').length < 1) {     
-                    var movieTitle = imageEl.attr('alt');
-                    var movieUrl = convertTitleToUrl(movieTitle)
+                    var movieTitle = movieLink.attr('href');
+                    movieTitle = getURLParameter('t', movieTitle);
+                    var movieUrl = convertTitleToUrl(movieTitle);
                     
+                    console.log(movieUrl);
+
                     $.ajax({
                         url: movieUrl,
                         dataType: 'json',
                         type: 'GET',
                         success:function(data){
-                            console.log(data.movies.length);
                             if (data.movies.length > 0) {
                                 var rating = data.movies[0].ratings.critics_score;
+                                var audience_rating = data.movies[0].ratings.audience_score;
+                                var rtLink = data.movies[0].links.alternate;
+
                                 if (rating > 70) {
-                                    var $ratingEl = $("<a href='"+ movieUrl +"' class='rt_rating rt_fresh'><div class='icon'></div>"+ rating +"</a>");
-                                    bindElementTemp.append($ratingEl);
-                                    $ratingEl.hide().fadeIn(1000);
+                                    var ratingClass = 'fresh';
                                 } else if (rating > 0){
-                                    var $ratingEl = $("<a href='"+ movieUrl +"' class='rt_rating rt_rotten'><div class='icon'></div>"+ rating +"</a>");
-                                    bindElementTemp.append($ratingEl);
-                                    $ratingEl.hide().fadeIn(1000);
+                                    var ratingClass = 'rotten';
+                                } else {
+                                    var ratingClass = 'na';
+                                }
+
+                                var $ratingEl = $(
+                                        "<a href='"+ rtLink +"' class='rt_rating rt_" + ratingClass + "'>" + 
+                                        "<div class='icon'></div>"+ rating + 
+                                        "<div class='icon audience'></div>" + audience_rating + "</a>"
+                                    );
+                                bindElementTemp.append($ratingEl);
+                                $ratingEl.hide().fadeIn(1000);
+                                
+                                if ($ratingEl.hasClass('rt_na')) {
+                                    $ratingEl.text('no info available');
                                 }
                             }
                         }

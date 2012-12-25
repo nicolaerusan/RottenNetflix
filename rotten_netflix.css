@@ -12,8 +12,14 @@
 	z-index: 13;
 }
 
-.rt_rating:hover{
+a.rt_rating:hover{
 	text-decoration:underline;	
+}
+
+.rt_na {
+	font-size: 9px;
+	padding: 7px;
+	color:#AAA;
 }
 
 .rt_rating .icon{
@@ -22,8 +28,6 @@
 	width:16px;
 	margin-right:5px;
 }
-
-
 .rt_fresh .icon{
 	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
 	background-position: -256px -142px;
@@ -35,5 +39,11 @@
 	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
 	background-position: -272px -142px;
 }
+
+.icon.audience {
+	background-position: -286px -143px;
+	margin-left: 15px;
+}
+
 
 .boxShot {position: relative;}
