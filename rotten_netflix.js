@@ -97,6 +97,7 @@ function computeRatings(){
                 
                 if (bindElementTemp.children('.rt_rating').length < 1) {     
                     
+                    // If the box shot is small, we need to get the link from the img alt tag instead
                     if ($(this).hasClass('boxShot-sm')) {
                         var movieTitle = $movieLink.find('img').attr('alt');
                         var movieUrl = convertTitleToUrl(movieTitle);

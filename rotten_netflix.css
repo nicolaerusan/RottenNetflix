@@ -2,6 +2,8 @@
 .boxShot {position: relative;}
 #global-search-form {position: relative}
 .account-menu .submenu {z-index:9999}
+.sc-kd #global-search button, #page-KidsSearch #global-search button {top:8px!important;}
+.sc-kd #rt_filter, #page-KidsSearch #rt_filter {left: -115px;top: 7px;}
 
 /* Box Shot Ratings */
 .rt_rating{
