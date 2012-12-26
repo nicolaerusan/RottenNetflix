@@ -2,9 +2,16 @@ ROTTEN NETFLIX v.4
 
 Update Dec 26th 2012 --
 
-I found this extention and saw that it wasn't being updated anymore. I took the liberty of getting it functioning again
-and adding in some new features. In addition to seeing both critic and audience rating laid over the box tops, you now
-also have the option to filter out rotten movies. All original credit goes to @nicolaerusan.
+I found this extention and saw that it wasn't being updated anymore. I took the liberty of getting it functioning again and adding in some new features. 
+
+Changes:
+  - Ajax request now hits the rottentomatoes API
+  - Request made only when the movie shows up in the viewport
+  - Audience ratings shown
+  - Some styling changes to account for new netflix styles
+  - Ability to filter out rotten movies
+
+All original credit goes to @nicolaerusan.
 
 -- @orrybaram
 
