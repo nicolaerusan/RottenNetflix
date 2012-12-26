@@ -121,14 +121,9 @@ function computeRatings(){
                                         "<div class='icon audience rt_" + audienceClass + "'></div>" + audience_rating +"%"+ "</a>"
                                     );
                                 bindElementTemp.append($ratingEl);
-                                $ratingEl.hide().fadeIn(1000);
+                                $ratingEl.hide().fadeIn(500);
                                 
-                                // TODO: add the ability to hide rotten movies
-                                if (hideRotten) {
-                                    if ($parentEl.hasClass('rotten')) {
-                                        $parentEl.fadeOut(2000)
-                                    }
-                                }
+                                
                             }
                         }
                     });
@@ -136,11 +131,23 @@ function computeRatings(){
                 } 
             }
         };
+        // TODO: add the ability to hide rotten movies
+        if (hideRotten) {
+            if ($parentEl.hasClass('rotten')) {
+                $parentEl.fadeOut(500)
+            }
+        } else {
+            if ($parentEl.hasClass('rotten')) {
+                $parentEl.fadeIn(500)
+            }
+        }
     });
 };
 
 function renderFilter() {
-    $('.titleAndTag').append('<a href="#" id="rt_filter">Rotten Tomatoes Filter <span class="acct-menu-dropdown-trigger"></a>');
+    var $filterSelect = $('<label id="rt_filter"><input type="checkbox">Hide Rotten Movies</label>');
+    
+    $('#global-search-form').prepend($filterSelect);
 }
 
 $(function(){
@@ -168,7 +175,17 @@ $(function(){
     }
     renderFilter();
     computeRatings();
-
+    
+    $('#rt_filter').find('input').change(function(){
+        if ($(this).is(':checked')) {
+            hideRotten = true;
+            console.log('Hide rotten movies');
+        } else {
+            hideRotten = false;
+            console.log('Show rotten movies')
+        }
+    });
+    
     window.setInterval(computeRatings, 3000);
     
     // handle lazy loading of moviesactivated by click on next arrows for Suggested page.   
