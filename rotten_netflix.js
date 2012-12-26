@@ -139,6 +139,10 @@ function computeRatings(){
     });
 };
 
+function renderFilter() {
+    $('#global-search-form').prepend('<a href="#" id="rt_filter">Filter <span class="acct-menu-dropdown-trigger"></a>');
+}
+
 $(function(){
     
     switch($('body').attr('id')){
@@ -162,7 +166,7 @@ $(function(){
             bindElement = '.boxShot';
         break;
     }
-    
+    renderFilter();
     computeRatings();
 
     window.setInterval(computeRatings, 3000);

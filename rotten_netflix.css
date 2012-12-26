@@ -1,5 +1,8 @@
+/* Netflix overrides */
 .boxShot {position: relative;}
+#global-search-form {position: relative}
 
+/* Box Shot Ratings */
 .rt_rating{
 	position: absolute;
 	z-index: 1;
@@ -53,3 +56,24 @@
 	bottom: 4px;
 }
 .boxShot-sm .rt_rating span {margin-right: 5px;}
+
+/* Filter */
+#rt_filter {
+	position: absolute;
+	top:3px;
+	color:white;
+	left:-20px;
+}
+#rt_filter:after {
+	content:'';
+	position:absolute;
+	right:-15px;
+	bottom: 3px;
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 5px 5px 0 5px;
+	border-color: #ffffff transparent transparent transparent;
+
+
+}
