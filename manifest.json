@@ -1,6 +1,6 @@
 {
   "name": "Rotten Netflix",
-  "version": "0.3",
+  "version": "0.4",
   "manifest_version": 2,
   "description": "Overlays Rotten Tomato reviews when browsing Netflix.",
   "content_scripts": [
