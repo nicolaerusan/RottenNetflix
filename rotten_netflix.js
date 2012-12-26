@@ -62,6 +62,25 @@ function getURLParameter(name, url) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
 
+function renderFilter() {
+    var $filterSelect = $('<label id="rt_filter"><input type="checkbox">Hide Rotten Movies</label>');
+    $('#global-search-form').prepend($filterSelect);
+}
+
+function hideRottenMovies($el) {
+    if (hideRotten) {
+        if ($el.hasClass('rotten')) {
+            $el.fadeOut(500);
+        } else if ($el.hasClass('na') && $el.find('.icon.audience').hasClass('rt_rotten')) {
+            $el.fadeOut(500);
+        }
+    } else {
+        if ($el.hasClass('rotten') || $el.hasClass('na')) {
+            $el.fadeIn(500)
+        }
+    }
+}
+
 function computeRatings(){
     $('.boxShot').each(function(){
         var $movieLink = $(this).find('a');
@@ -97,7 +116,7 @@ function computeRatings(){
                                 var audience_rating = data.movies[0].ratings.audience_score;
                                 var rtLink = data.movies[0].links.alternate;
 
-                                if (rating > 60) {
+                                if (rating > 59) {
                                     var ratingClass = 'fresh';
                                 } else if (rating > 0){
                                     var ratingClass = 'rotten';
@@ -105,7 +124,7 @@ function computeRatings(){
                                     var ratingClass = 'na';
                                 }
                                 
-                                if (audience_rating > 60) {
+                                if (audience_rating > 59) {
                                     var audienceClass = 'fresh';
                                 } else if (audience_rating > 0){
                                     var audienceClass = 'rotten';
@@ -122,33 +141,19 @@ function computeRatings(){
                                     );
                                 bindElementTemp.append($ratingEl);
                                 $ratingEl.hide().fadeIn(500);
-                                
-                                
                             }
                         }
                     });
-                    $parentEl.addClass('polled');
+                    
+                    if ($parentEl.find('.rt_rating').length !== 0) {
+                        $parentEl.addClass('polled');
+                    }
                 } 
             }
         };
-        // TODO: add the ability to hide rotten movies
-        if (hideRotten) {
-            if ($parentEl.hasClass('rotten')) {
-                $parentEl.fadeOut(500)
-            }
-        } else {
-            if ($parentEl.hasClass('rotten')) {
-                $parentEl.fadeIn(500)
-            }
-        }
+        hideRottenMovies($parentEl);
     });
 };
-
-function renderFilter() {
-    var $filterSelect = $('<label id="rt_filter"><input type="checkbox">Hide Rotten Movies</label>');
-    
-    $('#global-search-form').prepend($filterSelect);
-}
 
 $(function(){
     
@@ -179,10 +184,8 @@ $(function(){
     $('#rt_filter').find('input').change(function(){
         if ($(this).is(':checked')) {
             hideRotten = true;
-            console.log('Hide rotten movies');
         } else {
             hideRotten = false;
-            console.log('Show rotten movies')
         }
     });
     
