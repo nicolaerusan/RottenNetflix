@@ -140,7 +140,7 @@ function computeRatings(){
 };
 
 function renderFilter() {
-    $('#global-search-form').prepend('<a href="#" id="rt_filter">Filter <span class="acct-menu-dropdown-trigger"></a>');
+    $('.titleAndTag').append('<a href="#" id="rt_filter">Rotten Tomatoes Filter <span class="acct-menu-dropdown-trigger"></a>');
 }
 
 $(function(){
