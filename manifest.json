@@ -1,5 +1,5 @@
 {
-  "name": "Rotten Netflix",
+  "name": "Netflix Rottenizer",
   "version": "0.4",
   "manifest_version": 2,
   "description": "Overlays Rotten Tomato reviews when browsing Netflix.",

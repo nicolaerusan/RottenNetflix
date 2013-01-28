@@ -1,4 +1,4 @@
-var apiKey = "9udjy8ah39qedyb6eb6rd4p6"; // not used, but could use as a fallback.
+var apiKey = "9udjy8ah39qedyb6eb6rd4p6";
 var bindElement; // depending on the page, append the rotten tomatoes info to different elem.
 var hideRotten = false;
 
