@@ -21,8 +21,10 @@ $.fn.isOnScreen = function(){
     
 };
 
+console.log('hello3!')
+
 function convertTitleToUrl(title) {
-  var rtUrl = "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=" + apiKey;
+  var rtUrl = "http://netflixrottenizer.appspot.com";
   title = encodeURI(title);
   title = removeSubtitles(title);
   title = replaceAmpersands(title);
@@ -30,7 +32,7 @@ function convertTitleToUrl(title) {
   title = title.toLowerCase();
   title = removeLeadingArticle(title);
   title = replaceAccentedLetters(title);
-  rtUrl += "&q=" + title + "&page_limit=1";
+  rtUrl += "?q=" + title + "&page_limit=1";
   return rtUrl;
 }
 
@@ -107,42 +109,38 @@ function computeRatings(){
                         var movieUrl = convertTitleToUrl(movieTitle);
                     }
 
-                    $.ajax({
-                        url: movieUrl,
-                        dataType: 'json',
-                        type: 'GET',
-                        success:function(data){
-                            if (data.movies.length > 0) {
-                                var rating = data.movies[0].ratings.critics_score;
-                                var audience_rating = data.movies[0].ratings.audience_score;
-                                var rtLink = data.movies[0].links.alternate;
+                    $.getJSON(movieUrl, function(data){
+                        
+                        if (data.movies.length > 0) {
+                            var rating = data.movies[0].ratings.critics_score;
+                            var audience_rating = data.movies[0].ratings.audience_score;
+                            var rtLink = data.movies[0].links.alternate;
 
-                                if (rating > 59) {
-                                    var ratingClass = 'fresh';
-                                } else if (rating > 0){
-                                    var ratingClass = 'rotten';
-                                } else {
-                                    var ratingClass = 'na';
-                                }
-                                
-                                if (audience_rating > 59) {
-                                    var audienceClass = 'fresh';
-                                } else if (audience_rating > 0){
-                                    var audienceClass = 'rotten';
-                                } else {
-                                    var audienceClass = 'na';
-                                }
-
-                                $parentEl.addClass(ratingClass);
-
-                                var $ratingEl = $(
-                                        "<a target='_blank' href='"+ rtLink +"' class='rt_rating'>" + 
-                                        "<div class='icon rt_" + ratingClass + "'></div><span class="+ratingClass+">"+ rating +"%</span>"  + 
-                                        "<div class='icon audience rt_" + audienceClass + "'></div>" + audience_rating +"%"+ "</a>"
-                                    );
-                                bindElementTemp.append($ratingEl);
-                                $ratingEl.hide().fadeIn(500);
+                            if (rating > 59) {
+                                var ratingClass = 'fresh';
+                            } else if (rating > 0){
+                                var ratingClass = 'rotten';
+                            } else {
+                                var ratingClass = 'na';
                             }
+                            
+                            if (audience_rating > 59) {
+                                var audienceClass = 'fresh';
+                            } else if (audience_rating > 0){
+                                var audienceClass = 'rotten';
+                            } else {
+                                var audienceClass = 'na';
+                            }
+
+                            $parentEl.addClass(ratingClass);
+
+                            var $ratingEl = $(
+                                    "<a target='_blank' href='"+ rtLink +"' class='rt_rating'>" + 
+                                    "<div class='icon rt_" + ratingClass + "'></div><span class="+ratingClass+">"+ rating +"%</span>"  + 
+                                    "<div class='icon audience rt_" + audienceClass + "'></div>" + audience_rating +"%"+ "</a>"
+                                );
+                            bindElementTemp.append($ratingEl);
+                            $ratingEl.hide().fadeIn(500);
                         }
                     });
                     

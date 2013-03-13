@@ -1,14 +1,15 @@
 {
   "name": "Netflix Rottenizer",
-  "version": "0.5.1",
-  "manifest_version": 5,
+  "version": "0.5.4",
+  "manifest_version": 8,
   "description": "Overlays Rotten Tomato reviews when browsing Netflix.",
   "content_scripts": [
 	{ "matches": ["http://*.netflix.com/*"], "js": ["jquery-1.7.1.min.js", "netflix_rottenizer.js"], "css": ["netflix_rottenizer.css"] }
   ],
   "permissions": [
     "http://api.rottentomatoes.com/",
-    "http://www.rottentomatoes.com/"
+    "http://www.rottentomatoes.com/",
+    "http://netflixrottenizer.appspot.com/"
   ],
   "icons": {
   		    "16": "icon16.png",
