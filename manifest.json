@@ -1,7 +1,7 @@
 {
   "name": "Netflix Rottenizer",
-  "version": "0.5.4",
-  "manifest_version": 8,
+  "version": "0.5.5",
+  "manifest_version": 9,
   "description": "Overlays Rotten Tomato reviews when browsing Netflix.",
   "content_scripts": [
 	{ "matches": ["http://*.netflix.com/*"], "js": ["jquery-1.7.1.min.js", "netflix_rottenizer.js"], "css": ["netflix_rottenizer.css"] }
