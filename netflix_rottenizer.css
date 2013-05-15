@@ -65,12 +65,10 @@
 	font-weight: bold;
 	border-radius: 3px;
 	position: absolute;
-	top: 0;
-	right: -116px;
-	left: -176px;
+	top: 4px;
 	width: 129px;
 	font-size: 12px;
-	left: -108px;
+	left: -158px;
 	padding: 5px;
 	background-color: rgba(15, 8, 8, 0.11);
 	color: white;
