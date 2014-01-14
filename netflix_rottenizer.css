@@ -18,6 +18,7 @@
 	box-sizing: border-box;
 	color: white;
 	z-index: 13;
+	text-align: center;
 }
 
 .rt_rating:hover {text-decoration: none!important;}
@@ -65,7 +66,7 @@
 	font-weight: bold;
 	border-radius: 3px;
 	position: absolute;
-	top: 4px;
+	top: 25px;
 	width: 129px;
 	font-size: 12px;
 	left: -158px;

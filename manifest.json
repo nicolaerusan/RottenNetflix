@@ -1,6 +1,6 @@
 {
   "name": "Netflix Rottenizer",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "manifest_version": 2, // dont change
   "description": "Overlays Rotten Tomato reviews when browsing Netflix.",
   "content_scripts": [
