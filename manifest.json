@@ -1,19 +1,21 @@
 {
   "name": "Netflix Rottenizer",
-  "version": "0.5.6",
-  "manifest_version": 2, // dont change
+  "version": "0.6.1",
+  "manifest_version": 2,
   "description": "Overlays Rotten Tomato reviews when browsing Netflix.",
-  "content_scripts": [
-	{ "matches": ["http://*.netflix.com/*"], "js": ["jquery-1.7.1.min.js", "netflix_rottenizer.js"], "css": ["netflix_rottenizer.css"] }
-  ],
+  "content_scripts": [{ 
+    "matches": ["http://*.netflix.com/*"], 
+    "js": ["jquery-1.7.1.min.js", "netflix_rottenizer.js"], 
+    "css": ["netflix_rottenizer.css"] 
+  }],
   "permissions": [
     "http://api.rottentomatoes.com/",
     "http://www.rottentomatoes.com/",
     "http://netflixrottenizer.appspot.com/"
   ],
   "icons": {
-  		    "16": "icon16.png",
-          "48": "icon48.png",
-          "128": "icon128.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   }
 }
