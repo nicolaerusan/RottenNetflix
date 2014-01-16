@@ -100,7 +100,6 @@ function computeRatings() {
 
                     if(serverIsServing && hit_the_server) {
                         serverPings += 1;
-                        console.log(serverPings);
                         
                         $.getJSON(movieUrl).
                             success(function(data) {
