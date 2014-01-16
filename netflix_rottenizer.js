@@ -1,6 +1,8 @@
 var hideRotten = false
 ,   serverIsServing = true
-,   bindElement;
+,   bindElement
+,   hit_the_server = true
+,   local_data = [];
 
 // ------------------ ON DOM LOAD ---------------------
 $(function() {
@@ -46,6 +48,14 @@ $(function() {
     });
 });
 
+chrome.storage.local.get('rotten_data', function(data) {
+    if (data.rotten_data) {
+        local_data = data.rotten_data
+    }
+});
+
+
+
 // ------------------ isONScreen ---------------------
 // calculates whether an element is currently displayed in the viewport
 $.fn.isOnScreen = function() {
@@ -75,7 +85,10 @@ function computeRatings() {
         ,   $movieLink = $this.find('a')
         ,   $parentEl = $this.parent()
         ,   $parentElClass = $parentEl.attr('class')
-        ,   bindElementTemp = $movieLink.closest(bindElement);
+        ,   bindElementTemp = $movieLink.closest(bindElement)
+        ,   RTData = {};
+
+
 
         //only poll rotten tomatoes if the element is on screen
         if ($parentEl.isOnScreen()) {
@@ -89,12 +102,23 @@ function computeRatings() {
                 var movieTitle = $(this).find('.boxShotImg').attr('alt');
                 var movieUrl = convertTitleToUrl(movieTitle);
             }
-            
+
             //make sure its a movie and hasnt already been polled
             if (!$parentElClass.match('TV') && !$parentEl.hasClass('polled')) {
                 if (bindElementTemp.children('.rt_rating').length < 1) {
                     
-                    if(serverIsServing) {
+                    // check to see if we have it in local storage
+                    for (var i = 0; i < local_data.length; i++) {
+                        if(_.contains(local_data[i], movieTitle)) {
+                            RTData = local_data[i]
+                            hit_the_server = false;
+                            addRTRatings(bindElementTemp, RTData)
+                            break;
+                        } 
+                    }
+
+                    if(serverIsServing && hit_the_server) {
+                        console.log('ping')
                         $.getJSON(movieUrl).
                             success(function(data) {
                                 if (data.movies && data.movies.length > 0) {
@@ -102,34 +126,18 @@ function computeRatings() {
                                     var audience_rating = data.movies[0].ratings.audience_score;
                                     var rtLink = data.movies[0].links.alternate;
 
-                                    if (rating > 59) {
-                                        var ratingClass = 'fresh';
-                                    } else if (rating > 0) {
-                                        var ratingClass = 'rotten';
-                                    } else {
-                                        var ratingClass = 'na';
+                                    RTData = {
+                                        'movie': movieTitle,
+                                        'rating': rating,
+                                        'audience_rating': audience_rating,
+                                        'rtLink': rtLink
+                                    };
+
+                                    if(!_.contains(local_data, movieTitle)) {
+                                        local_data.push(RTData);
+                                        chrome.storage.local.set({rotten_data: local_data})
                                     }
-
-                                    if (audience_rating > 59) {
-                                        var audienceClass = 'fresh';
-                                    } else if (audience_rating > 0) {
-                                        var audienceClass = 'rotten';
-                                    } else {
-                                        var audienceClass = 'na';
-                                    }
-
-                                    $parentEl.addClass(ratingClass);
-
-                                    var $ratingEl = $(
-                                        "<a target='_blank' href='" + rtLink + "' class='rt_rating'>" +
-                                        "<div class='icon rt_" + ratingClass + "'></div><span class=" + ratingClass + ">" + rating + "%</span>" +
-                                        "<div class='icon audience rt_" + audienceClass + "'></div>" + audience_rating + "%" + "</a>"
-                                    );
-
-                                    bindElementTemp.append($ratingEl);
-
-                                    $ratingEl.hide().fadeIn(500);
-
+                                    addRTRatings(bindElementTemp, RTData)
                                     serverIsServing = true;
                                 }
                             }).
@@ -140,19 +148,62 @@ function computeRatings() {
                                 serverIsServing = false;
                             })
                         ;
-
-                        if ($parentEl.find('.rt_rating').length !== 0) {
-                            $parentEl.addClass('polled');
-                        }
                     }
                 }
             }
+
+            
+
+
+
+
         };
         hideRottenMovies($parentEl);
+        hit_the_server = true;
     });
     
     setTimeout(function() { computeRatings() }, 3000);
 };
+
+function addRTRatings($element, data) {
+    var $el = $element
+    ,   $movieLink = $el.find('a')
+    ,   $parentEl = $el.parent()
+    ,   $parentElClass = $parentEl.attr('class')
+
+    if ($parentEl.find('.rt_rating').length !== 0) {
+        $parentEl.addClass('polled');
+    }
+
+    if (data.rating > 59) {
+        var ratingClass = 'fresh';
+    } else if (data.rating > 0) {
+        var ratingClass = 'rotten';
+    } else {
+        var ratingClass = 'na';
+    }
+
+    if (data.audience_rating > 59) {
+        var audienceClass = 'fresh';
+    } else if (data.audience_rating > 0) {
+        var audienceClass = 'rotten';
+    } else {
+        var audienceClass = 'na';
+    }
+
+    $parentEl.addClass(ratingClass);
+
+    var $ratingEl = $(
+        "<a target='_blank' href='" + data.rtLink + "' class='rt_rating'>" +
+        "<div class='icon rt_" + ratingClass + "'></div><span class=" + ratingClass + ">" + data.rating + "%</span>" +
+        "<div class='icon audience rt_" + audienceClass + "'></div>" + data.audience_rating + "%" + "</a>"
+    );
+
+    $el.append($ratingEl);
+
+    $ratingEl.hide().fadeIn(500);
+    
+}
 
 
 // ------------------ Hide Rotten Movies ---------------------

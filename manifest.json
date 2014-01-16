@@ -5,13 +5,14 @@
   "description": "Overlays Rotten Tomato reviews when browsing Netflix.",
   "content_scripts": [{ 
     "matches": ["http://*.netflix.com/*"], 
-    "js": ["jquery-1.7.1.min.js", "netflix_rottenizer.js"], 
+    "js": ["jquery-1.7.1.min.js", "lodash.js", "netflix_rottenizer.js"], 
     "css": ["netflix_rottenizer.css"] 
   }],
   "permissions": [
     "http://api.rottentomatoes.com/",
     "http://www.rottentomatoes.com/",
-    "http://netflixrottenizer.appspot.com/"
+    "http://netflixrottenizer.appspot.com/",
+    "storage"
   ],
   "icons": {
     "16": "icon16.png",
