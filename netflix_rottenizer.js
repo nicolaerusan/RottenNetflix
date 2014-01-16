@@ -121,8 +121,8 @@ function computeRatings() {
                                 } else {
                                     RTData = {
                                         'movie': movieTitle,
-                                        'rating': 'na',
-                                        'audience_rating': 'na',
+                                        'rating': 'n/a',
+                                        'audience_rating': 'n/a',
                                     };
                                 }
 
@@ -155,28 +155,31 @@ function addRTRatings($element, data) {
     ,   $parentEl = $el.parent()
     ,   $parentElClass = $parentEl.attr('class')
 
+    var audienceClass = 'na';
+    var ratingClass = 'na';
+
     if (data.rating > 59) {
-        var ratingClass = 'fresh';
+        ratingClass = 'fresh';
     } else if (data.rating > 0) {
-        var ratingClass = 'rotten';
-    } else {
-        var ratingClass = 'na';
+        ratingClass = 'rotten';
+    } else if (data.rating ==='n/a') {
+        ratingClass = 'na';
     }
 
     if (data.audience_rating > 59) {
-        var audienceClass = 'fresh';
+        audienceClass = 'fresh';
     } else if (data.audience_rating > 0) {
-        var audienceClass = 'rotten';
-    } else {
-        var audienceClass = 'na';
-    }
+        audienceClass = 'rotten';
+    } else if (data.audience_rating ==='n/a'){
+        audienceClass = 'na';
+    } 
 
     $parentEl.addClass(ratingClass);
 
     var $ratingEl = $(
         "<a target='_blank' href='" + data.rtLink + "' class='rt_rating'>" +
-        "<div class='icon rt_" + ratingClass + "'></div><span class=" + ratingClass + ">" + data.rating + "%</span>" +
-        "<div class='icon audience rt_" + audienceClass + "'></div>" + data.audience_rating + "%" + "</a>"
+        "<div class='icon rt_" + ratingClass + "'></div><span class='critics_score " + ratingClass + "''>" + data.rating + "%</span>" +
+        "<div class='icon audience rt_" + audienceClass + "'></div><span class='audience_score percent "+audienceClass+"'>" + data.audience_rating + "%</span>" + "</a>"
     );
 
     $el.append($ratingEl);

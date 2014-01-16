@@ -39,6 +39,11 @@
 	width:16px;
 	margin-right:5px;
 }
+
+.rt_rating.percent.na {
+	display:none;
+}
+
 .rt_fresh.icon{
 	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
 	background-position: -256px -142px;
