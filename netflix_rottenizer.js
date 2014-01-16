@@ -181,6 +181,7 @@ function addRTRatings($element, data) {
         "<div class='icon audience rt_" + audienceClass + "'></div><span class='audience_score percent "+audienceClass+"'>" + data.audience_rating + "%</span>" + "</a>"
     );
 
+    if (data.rating !== 'n/a' || data.audience_rating !== 'n/a' )
     $el.append($ratingEl);
 
     $ratingEl.hide().fadeIn(500);
@@ -201,7 +202,7 @@ function hideRottenMovies($el) {
             $el.fadeOut(500);
         }
     } else {
-        if ($el.hasClass('rotten') || $el.hasClass('na')) {
+        if (!$el.hasClass('rateable-movie-buffer') &&  $el.hasClass('na') || $el.hasClass('rotten')) {
             $el.fadeIn(500)
         }
     }
