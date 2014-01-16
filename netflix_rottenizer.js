@@ -1,7 +1,8 @@
 var hideRotten = false
 ,   serverIsServing = true
 ,   bindElement
-,   hit_the_server = true
+,   serverPings = 0
+,   use_local_storage = true
 ,   local_data = [];
 
 // ------------------ ON DOM LOAD ---------------------
@@ -55,28 +56,6 @@ chrome.storage.local.get('rotten_data', function(data) {
 });
 
 
-
-// ------------------ isONScreen ---------------------
-// calculates whether an element is currently displayed in the viewport
-$.fn.isOnScreen = function() {
-    var win = $(window);
-    var viewport = {
-        top: win.scrollTop(),
-        left: win.scrollLeft()
-    };
-
-    viewport.right = viewport.left + win.width();
-    viewport.bottom = viewport.top + win.height();
-
-    var bounds = this.offset();
-    bounds.right = bounds.left + this.outerWidth();
-    bounds.bottom = bounds.top + this.outerHeight();
-
-    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
-};
-
-
-
 // ------------------ Add RT Ratings to Movies ---------------------
 function computeRatings() {
 
@@ -86,8 +65,8 @@ function computeRatings() {
         ,   $parentEl = $this.parent()
         ,   $parentElClass = $parentEl.attr('class')
         ,   bindElementTemp = $movieLink.closest(bindElement)
+        ,   hit_the_server = true
         ,   RTData = {};
-
 
 
         //only poll rotten tomatoes if the element is on screen
@@ -108,17 +87,21 @@ function computeRatings() {
                 if (bindElementTemp.children('.rt_rating').length < 1) {
                     
                     // check to see if we have it in local storage
-                    for (var i = 0; i < local_data.length; i++) {
-                        if(_.contains(local_data[i], movieTitle)) {
-                            RTData = local_data[i]
-                            hit_the_server = false;
-                            addRTRatings(bindElementTemp, RTData)
-                            break;
-                        } 
+                    if (use_local_storage) {
+                        for (var j = 0; j < local_data.length; j++) {
+                            if(_.contains(local_data[j], movieTitle)) {
+                                RTData = local_data[j]
+                                addRTRatings(bindElementTemp, RTData)
+                                hit_the_server = false;
+                                break;
+                            } 
+                        }
                     }
 
                     if(serverIsServing && hit_the_server) {
-                        console.log('ping')
+                        serverPings += 1;
+                        console.log(serverPings);
+                        
                         $.getJSON(movieUrl).
                             success(function(data) {
                                 if (data.movies && data.movies.length > 0) {
@@ -133,12 +116,19 @@ function computeRatings() {
                                         'rtLink': rtLink
                                     };
 
-                                    if(!_.contains(local_data, movieTitle)) {
-                                        local_data.push(RTData);
-                                        chrome.storage.local.set({rotten_data: local_data})
-                                    }
                                     addRTRatings(bindElementTemp, RTData)
                                     serverIsServing = true;
+                                } else {
+                                    RTData = {
+                                        'movie': movieTitle,
+                                        'rating': 'na',
+                                        'audience_rating': 'na',
+                                    };
+                                }
+
+                                if(!_.contains(local_data, movieTitle)) {
+                                    local_data.push(RTData);
+                                    chrome.storage.local.set({rotten_data: local_data})
                                 }
                             }).
                             
@@ -150,16 +140,10 @@ function computeRatings() {
                         ;
                     }
                 }
+                $parentEl.addClass('polled');
             }
-
-            
-
-
-
-
         };
         hideRottenMovies($parentEl);
-        hit_the_server = true;
     });
     
     setTimeout(function() { computeRatings() }, 3000);
@@ -170,10 +154,6 @@ function addRTRatings($element, data) {
     ,   $movieLink = $el.find('a')
     ,   $parentEl = $el.parent()
     ,   $parentElClass = $parentEl.attr('class')
-
-    if ($parentEl.find('.rt_rating').length !== 0) {
-        $parentEl.addClass('polled');
-    }
 
     if (data.rating > 59) {
         var ratingClass = 'fresh';
@@ -202,7 +182,6 @@ function addRTRatings($element, data) {
     $el.append($ratingEl);
 
     $ratingEl.hide().fadeIn(500);
-    
 }
 
 
@@ -267,3 +246,23 @@ function deSrcHTML(html) {
 function getURLParameter(name, url) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
+
+// ------------------ isONScreen ---------------------
+// Jquery Plugin -- calculates whether an element is currently displayed in the viewport
+$.fn.isOnScreen = function() {
+    var win = $(window);
+    var viewport = {
+        top: win.scrollTop(),
+        left: win.scrollLeft()
+    };
+
+    viewport.right = viewport.left + win.width();
+    viewport.bottom = viewport.top + win.height();
+
+    var bounds = this.offset();
+    bounds.right = bounds.left + this.outerWidth();
+    bounds.bottom = bounds.top + this.outerHeight();
+
+    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
+};
+
