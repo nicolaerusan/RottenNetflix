@@ -1,18 +1,28 @@
 {
-  "name": "Smelp",
-  "version": "0.1.0",
+  "name": "Netflix Rottenizer",
+  "version": "0.7.2",
   "manifest_version": 2,
-  "description": "Get Yelp information in Seamless",
+  "description": "Overlays Rotten Tomato reviews when browsing Netflix.",
   "permissions": [
-    "http://www.seamless.com/",
+    "http://api.rottentomatoes.com/",
+    "http://www.rottentomatoes.com/",
     "http://netflixrottenizer.appspot.com/",
-    "http://localhost:11090/",
-    "storage"
+    "storage",
+    "tabs"
   ],
+  "background": { "scripts": ["background.js"] },
+  "page_action": {
+    "default_icon": {                    
+      "19": "icon16.png",           
+      "38": "icon48.png"            
+    },
+    "default_title": "Netflix Rottenizer",
+    "default_popup": "popup.html"
+  },
   "content_scripts": [{ 
-    "matches": ["http://*.seamless.com/*"], 
-    "js": ["jquery.min.js", "smelp.js"], 
-    "css": ["smelp.css"] 
+    "matches": ["http://*.netflix.com/*"], 
+    "js": ["jquery-1.7.1.min.js", "lodash.js", "netflix_rottenizer.js"], 
+    "css": ["netflix_rottenizer.css"] 
   }],
 
   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
