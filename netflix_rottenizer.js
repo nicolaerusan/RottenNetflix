@@ -1,4 +1,4 @@
-var TESTING = true
+var TESTING = false
 ,   hideRotten = false
 ,   serverIsServing = true
 ,   bindElement
