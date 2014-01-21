@@ -216,6 +216,7 @@ function hideRottenMovies($el) {
 
 // ------------------ Sanitation Functions ---------------------
 function convertTitleToUrl(title) {
+    var rtUrl = ROOT_URL;
     title = encodeURI(title);
     title = removeSubtitles(title);
     title = replaceAmpersands(title);
@@ -223,8 +224,8 @@ function convertTitleToUrl(title) {
     title = title.toLowerCase();
     title = removeLeadingArticle(title);
     title = replaceAccentedLetters(title);
-    ROOT_URL += "?q=" + title + "&page_limit=1";
-    return ROOT_URL;
+    rtUrl += "?q=" + title + "&page_limit=1";
+    return rtUrl;
 }
 
 function removeSubtitles(title) {
