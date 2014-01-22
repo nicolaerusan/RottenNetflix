@@ -3,7 +3,12 @@ var hideRotten = false
 ,   bindElement
 ,   serverPings = 0
 ,   use_local_storage = true
-,   local_data = [];
+,   local_data = []
+,   TESTING = true;
+
+var ROOT_URL = "http://netflixrottenizer.appspot.com/netflix/";
+if (TESTING) ROOT_URL = "http://localhost:11090/netflix/";
+
 
 // ------------------ ON DOM LOAD ---------------------
 $(function() {
@@ -210,16 +215,15 @@ function hideRottenMovies($el) {
 
 // ------------------ Sanitation Functions ---------------------
 function convertTitleToUrl(title) {
-    var rtUrl = "http://netflixrottenizer.appspot.com";
-    title = encodeURI(title);
+    var title = encodeURI(title);
     title = removeSubtitles(title);
     title = replaceAmpersands(title);
     title = removeExtraneousCharacters(title);
     title = title.toLowerCase();
     title = removeLeadingArticle(title);
     title = replaceAccentedLetters(title);
-    rtUrl += "?q=" + title + "&page_limit=1";
-    return rtUrl;
+    ROOT_URL += "?q=" + title + "&page_limit=1";
+    return ROOT_URL;
 }
 
 function removeSubtitles(title) {
