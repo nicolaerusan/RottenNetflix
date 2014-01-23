@@ -1,4 +1,4 @@
-var TESTING = false
+var TESTING = 1
 ,   hideRotten = false
 ,   serverIsServing = true
 ,   bindElement
@@ -108,6 +108,9 @@ function computeRatings() {
                         
                         $.getJSON(movieUrl).
                             success(function(data) {
+                                console.log(data)
+                                
+                                // We have info from RT
                                 if (data.movies && data.movies.length > 0) {
                                     var rating = data.movies[0].ratings.critics_score;
                                     var audience_rating = data.movies[0].ratings.audience_score;
@@ -122,6 +125,8 @@ function computeRatings() {
 
                                     addRTRatings(bindElementTemp, RTData)
                                     serverIsServing = true;
+                                
+                                // We don't have info
                                 } else {
                                     RTData = {
                                         'movie': movieTitle,
@@ -130,21 +135,29 @@ function computeRatings() {
                                     };
                                 }
 
-                                if(!_.contains(local_data, movieTitle)) {
-                                    local_data.push(RTData);
-                                    chrome.storage.local.set({rotten_data: local_data})
+                                // If we dont have the movie in local storage, add it
+                                if (use_local_storage) {
+                                    if(!_.contains(local_data, movieTitle)) {
+                                        local_data.push(RTData);
+                                        chrome.storage.local.set({rotten_data: local_data})
+                                    }
                                 }
+
+                                // Mark the element as polled
+                                $parentEl.addClass('polled');
                             }).
                             
                             error(function(error) {
-                                console.log(error);
-                                console.warn('Server is over quota');
-                                serverIsServing = false;
+                                console.log(error)
+                                if (error.status !== 200) {
+                                    console.log(error);
+                                    console.warn('Server problem');
+                                    //serverIsServing = false;    
+                                }
                             })
                         ;
                     }
                 }
-                $parentEl.addClass('polled');
             }
         };
         hideRottenMovies($parentEl);
