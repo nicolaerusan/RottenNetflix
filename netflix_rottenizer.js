@@ -107,9 +107,7 @@ function computeRatings() {
                         serverPings += 1;
                         
                         $.getJSON(movieUrl).
-                            success(function(data) {
-                                console.log(data)
-                                
+                            success(function(data) {                                
                                 // We have info from RT
                                 if (data.movies && data.movies.length > 0) {
                                     var rating = data.movies[0].ratings.critics_score;
@@ -148,7 +146,6 @@ function computeRatings() {
                             }).
                             
                             error(function(error) {
-                                console.log(error)
                                 if (error.status !== 200) {
                                     console.log(error);
                                     console.warn('Server problem');
