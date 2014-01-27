@@ -178,7 +178,10 @@ function addRTRatings($element, data) {
         audienceClass = 'na';
     } 
 
-    $parentEl.addClass(ratingClass);
+    $parentEl
+        .addClass(ratingClass)
+        .data('RTrating', data.rating);
+
 
     var $ratingEl = $(
         "<a target='_blank' href='" + data.rtLink + "' class='rt_rating'>" +
@@ -195,8 +198,19 @@ function addRTRatings($element, data) {
 
 // ------------------ Hide Rotten Movies ---------------------
 function renderFilter() {
-    var $filterSelect = $('<label id="rt_filter"><input type="checkbox">Hide Rotten Movies</label>');
+    var $filterSelect = $(
+        '<label id="rt_filter">' +
+            '<select name="RTfilter">' +
+                '<option>Hide Rotten Movies</option>' +
+                '<option>Show 90%+ movies</option>' +
+            '</select>' +
+        '</label>'
+    );
     $('#global-search-form').prepend($filterSelect);
+
+
+
+
 }
 
 function hideRottenMovies($el) {
