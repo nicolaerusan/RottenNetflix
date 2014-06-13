@@ -234,7 +234,7 @@ function renderFilter() {
             '<select name="RTfilter">' +
                 '<option value="show_all">Show All</option>' +
                 '<option value="hide_rotten">Hide Rotten Movies</option>' +
-                '<option value="show_highly_rated">Show 90%+ Movies</option>' +
+                //'<option value="show_highly_rated">Show 90%+ Movies</option>' +
             '</select>' +
         '</div>'
     );

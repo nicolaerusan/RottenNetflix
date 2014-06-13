@@ -81,10 +81,6 @@
 	font-size: 12px;
 	left: -158px;
 	padding: 5px;
+	padding-right: 10px;
 }
 #rt_filter input {margin-right: 5px;}
-#rt_filter:hover {
-	background-color: #991919;
-	box-shadow: #910F0F 0px 10px 14px inset, #8F3A3A 0px 1px 5px;
-	text-decoration: none;
-}
