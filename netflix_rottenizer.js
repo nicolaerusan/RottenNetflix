@@ -1,5 +1,7 @@
 var TESTING = false
 ,   hideRotten = false
+,   show_all = true
+,   show_highly_rated = false
 ,   serverIsServing = true
 ,   bindElement
 ,   serverPings = 0
@@ -40,11 +42,30 @@ $(function() {
     computeRatings(); // Initializes Rotten Tomato Ratings
     
     // Click handler for Hide Rotten filter
-    $('#rt_filter').find('input').change(function() {
-        if ($(this).is(':checked')) {
+    $('#rt_filter').find('select').change(function() {
+        var $this = $(this);
+        
+        // Hide Rotten
+        if ($this.val() === 'hide_rotten' ) {
             hideRotten = true;
-        } else {
+            show_highly_rated = false;
+            show_all = false;
+
+            console.log('hide rotten')
+
+        // Show Highly Rated
+        } else if ($this.val() === 'show_highly_rated') {
             hideRotten = false;
+            show_highly_rated = true;
+            show_all = false;
+
+            console.log('show_highly_rated')
+
+        // Show All            
+        } else {
+            show_all = true;
+            hideRotten = false;
+            show_highly_rated = false;
         }
     });
 
@@ -157,7 +178,7 @@ function computeRatings() {
                 }
             }
         };
-        hideRottenMovies($parentEl);
+        filterMovies($parentEl);
     });
     
     setTimeout(function() { computeRatings() }, 3000);
@@ -188,7 +209,10 @@ function addRTRatings($element, data) {
         audienceClass = 'na';
     } 
 
-    $parentEl.addClass(ratingClass);
+    $parentEl
+        .addClass(ratingClass)
+        .data('RTrating', data.rating);
+
 
     var $ratingEl = $(
         "<a target='_blank' href='" + data.rtLink + "' class='rt_rating'>" +
@@ -205,18 +229,39 @@ function addRTRatings($element, data) {
 
 // ------------------ Hide Rotten Movies ---------------------
 function renderFilter() {
-    var $filterSelect = $('<label id="rt_filter"><input type="checkbox">Hide Rotten Movies</label>');
+    var $filterSelect = $(
+        '<div id="rt_filter">' +
+            '<select name="RTfilter">' +
+                '<option value="show_all">Show All</option>' +
+                '<option value="hide_rotten">Hide Rotten Movies</option>' +
+                '<option value="show_highly_rated">Show 90%+ Movies</option>' +
+            '</select>' +
+        '</div>'
+    );
     $('#global-search-form').prepend($filterSelect);
+
 }
 
-function hideRottenMovies($el) {
+function filterMovies($el) {
+    
+    // Hide Rotten
     if (hideRotten) {
         if ($el.hasClass('rotten')) {
             $el.fadeOut(500);
         } else if ($el.hasClass('na') && $el.find('.icon.audience').hasClass('rt_rotten')) {
             $el.fadeOut(500);
         }
-    } else {
+    }
+
+    // Show Highly Rated Only
+    else if (show_highly_rated){
+        if (!$el.hasClass('rateable-movie-buffer') &&  $el.hasClass('na') || $el.data('RTrating') < 90 ) {
+            $el.fadeOut(500)
+        }
+    } 
+    
+    // Show All
+    else {
         if (!$el.hasClass('rateable-movie-buffer') &&  $el.hasClass('na') || $el.hasClass('rotten')) {
             $el.fadeIn(500)
         }
