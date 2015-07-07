@@ -91,14 +91,19 @@ function computeRatings() {
 
             var onMouseOverMovie = function() {
                 if ($this.children('.rt_rating').length > 0) {
+                    
+                    // ONly fade in if the thing is collapsed
+                    // This is gonna be a nightmare to maintain!!!
                     setTimeout(function() {
                         $this.children('.rt_rating').fadeOut();
                     }, 200);
+                    
                 }
             };
 
             var onMouseOutMovie = function() {
                 if ($this.children('.rt_rating').length > 0) {
+                    // ONly fade in if the thing isn't collapsed
                     setTimeout(function() {
                         if($this.children('.bob-card').length < 1) {
                             $this.children('.rt_rating').fadeIn();
