@@ -57,7 +57,7 @@ $(function() {
 
 chrome.storage.local.get('rotten_data', function(data) {
     if (data.rotten_data) {
-        local_data = data.rotten_data
+        local_data = data.rotten_data;
     }
 });
 
