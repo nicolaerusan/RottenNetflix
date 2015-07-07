@@ -16,108 +16,88 @@ if (TESTING) ROOT_URL = "http://localhost:9080/netflix";
 $(function() {
 
     // depending on the page, append the rotten tomatoes info to different elems.
-    switch ($('body').attr('id')) {
-        case 'page-WiHome':
-            bindElement = '.boxShot';
-            break;
+    // switch ($('body').attr('id')) {
+    //     case 'page-WiHome':
+    //         bindElement = '.boxShot';
+    //         break;
 
-        case 'page-WiAltGenre':
-            bindElement = '.boxShot';
-            break;
+    //     case 'page-WiAltGenre':
+    //         bindElement = '.boxShot';
+    //         break;
 
-        case 'page-WiMovie':
-            bindElement = '.agMovie';
-            break;
+    //     case 'page-WiMovie':
+    //         bindElement = '.agMovie';
+    //         break;
 
-        case 'page-RecommendationsHome':
-            bindElement = '.agMovie';
-            break;
+    //     case 'page-RecommendationsHome':
+    //         bindElement = '.agMovie';
+    //         break;
 
-        default:
-            bindElement = '.boxShot';
-            break;
-    }
+    //     default:
+    //         bindElement = '.boxShot';
+    //         break;
+    // }
 
-    renderFilter(); // Adds 'Hide Rotten' button
+    
     computeRatings(); // Initializes Rotten Tomato Ratings
     
-    // Click handler for Hide Rotten filter
-    $('#rt_filter').find('select').change(function() {
-        var $this = $(this);
-        
-        // Hide Rotten
-        if ($this.val() === 'hide_rotten' ) {
-            hideRotten = true;
-            show_highly_rated = false;
-            show_all = false;
+    
+    // $(document).on('scroll', function(evt) {
+    //     if ($(window).scrollTop() % 200 === 0) {
+    //         computeRatings();
+    //     }
+    // });
+    
 
-            console.log('hide rotten')
-
-        // Show Highly Rated
-        } else if ($this.val() === 'show_highly_rated') {
-            hideRotten = false;
-            show_highly_rated = true;
-            show_all = false;
-
-            console.log('show_highly_rated')
-
-        // Show All            
-        } else {
-            show_all = true;
-            hideRotten = false;
-            show_highly_rated = false;
-        }
-    });
-
-    // handle lazy loading of moviesactivated by click on next arrows for Suggested page.
-    $('.qSlider-navNext, qSlider-navNext').click(function() {
-        computeRatings();
-    });
+    // // handle lazy loading of moviesactivated by click on next arrows for Suggested page.
+    // $('.qSlider-navNext, qSlider-navNext').click(function() {
+    //     computeRatings();
+    // });
 });
 
-chrome.storage.local.get('rotten_data', function(data) {
-    if (data.rotten_data) {
-        local_data = data.rotten_data
-    }
-});
+// chrome.storage.local.get('rotten_data', function(data) {
+//     if (data.rotten_data) {
+//         local_data = data.rotten_data
+//     }
+// });
 
 
 // ------------------ Add RT Ratings to Movies ---------------------
 function computeRatings() {
 
-    $(bindElement).each(function() {
-        var $this = $(this)
-        ,   $movieLink = $this.find('a')
-        ,   $parentEl = $this.parent()
-        ,   $parentElClass = $parentEl.attr('class')
-        ,   bindElementTemp = $movieLink.closest(bindElement)
-        ,   hit_the_server = true
-        ,   RTData = {};
 
+
+    $('.slider-item').each(function() {
+        var $this = $(this);
+        // ,   $movieLink = $this.find('a')
+        // ,   $parentEl = $this.parent()
+        // ,   $parentElClass = $parentEl.attr('class')
+        // ,   bindElementTemp = $movieLink.closest(bindElement)
+            
+        var RTData = {};
+
+        var hit_the_server = true
+
+        
 
         //only poll rotten tomatoes if the element is on screen
-        if ($parentEl.isOnScreen()) {
+        if ($this.isOnScreen()) {
             
-            // If the box shot is small, we need to get the link from the img alt tag instead
-            if ($this.hasClass('boxShot-sm')) {
-                var movieTitle = $movieLink.find('img').attr('alt');
-                var movieUrl = convertTitleToUrl(movieTitle);
+            var movieTitle = $this.find('[aria-label]').attr('aria-label');
+            var movieUrl = convertTitleToUrl(movieTitle);
 
-            } else {
-                var movieTitle = $(this).find('.boxShotImg').attr('alt');
-                var movieUrl = convertTitleToUrl(movieTitle);
-            }
-
+            
             //make sure its a movie and hasnt already been polled
-            if (!$parentElClass.match('TV') && !$parentEl.hasClass('polled')) {
-                if (bindElementTemp.children('.rt_rating').length < 1) {
+
+            if (!$this.hasClass('polled')) {
+                if ($this.children('.rt_rating').length < 1) {
                     
                     // check to see if we have it in local storage
                     if (use_local_storage) {
                         for (var j = 0; j < local_data.length; j++) {
                             if(_.contains(local_data[j], movieTitle)) {
                                 RTData = local_data[j]
-                                addRTRatings(bindElementTemp, RTData)
+                                addRTRatings($this, RTData)
                                 hit_the_server = false;
                                 break;
                             } 
@@ -128,7 +108,10 @@ function computeRatings() {
                         serverPings += 1;
                         
                         $.getJSON(movieUrl).
-                            success(function(data) {                                
+                            success(function(data) {          
+
+                                console.log(data);
+
                                 // We have info from RT
                                 if (data.movies && data.movies.length > 0) {
                                     var rating = data.movies[0].ratings.critics_score;
@@ -142,7 +125,7 @@ function computeRatings() {
                                         'rtLink': rtLink
                                     };
 
-                                    addRTRatings(bindElementTemp, RTData)
+                                    addRTRatings($this, RTData)
                                     serverIsServing = true;
                                 
                                 // We don't have info
@@ -163,7 +146,7 @@ function computeRatings() {
                                 }
 
                                 // Mark the element as polled
-                                $parentEl.addClass('polled');
+                                $this.addClass('polled');
                             }).
                             
                             error(function(error) {
@@ -178,7 +161,7 @@ function computeRatings() {
                 }
             }
         };
-        filterMovies($parentEl);
+        
     });
     
     setTimeout(function() { computeRatings() }, 3000);
@@ -227,46 +210,8 @@ function addRTRatings($element, data) {
 }
 
 
-// ------------------ Hide Rotten Movies ---------------------
-function renderFilter() {
-    var $filterSelect = $(
-        '<div id="rt_filter">' +
-            '<select name="RTfilter">' +
-                '<option value="show_all">Show All</option>' +
-                '<option value="hide_rotten">Hide Rotten Movies</option>' +
-                //'<option value="show_highly_rated">Show 90%+ Movies</option>' +
-            '</select>' +
-        '</div>'
-    );
-    $('#global-search-form').prepend($filterSelect);
 
-}
 
-function filterMovies($el) {
-    
-    // Hide Rotten
-    if (hideRotten) {
-        if ($el.hasClass('rotten')) {
-            $el.fadeOut(500);
-        } else if ($el.hasClass('na') && $el.find('.icon.audience').hasClass('rt_rotten')) {
-            $el.fadeOut(500);
-        }
-    }
-
-    // Show Highly Rated Only
-    else if (show_highly_rated){
-        if (!$el.hasClass('rateable-movie-buffer') &&  $el.hasClass('na') || $el.data('RTrating') < 90 ) {
-            $el.fadeOut(500)
-        }
-    } 
-    
-    // Show All
-    else {
-        if (!$el.hasClass('rateable-movie-buffer') &&  $el.hasClass('na') || $el.hasClass('rotten')) {
-            $el.fadeIn(500)
-        }
-    }
-}
 
 // ------------------ Sanitation Functions ---------------------
 function convertTitleToUrl(title) {
