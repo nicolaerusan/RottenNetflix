@@ -55,17 +55,15 @@ $(function() {
     // });
 });
 
-// chrome.storage.local.get('rotten_data', function(data) {
-//     if (data.rotten_data) {
-//         local_data = data.rotten_data
-//     }
-// });
+chrome.storage.local.get('rotten_data', function(data) {
+    if (data.rotten_data) {
+        local_data = data.rotten_data
+    }
+});
 
 
 // ------------------ Add RT Ratings to Movies ---------------------
 function computeRatings() {
-
-
 
     $('.slider-item').each(function() {
         var $this = $(this);
@@ -73,16 +71,42 @@ function computeRatings() {
         // ,   $parentEl = $this.parent()
         // ,   $parentElClass = $parentEl.attr('class')
         // ,   bindElementTemp = $movieLink.closest(bindElement)
+
+
+
+
             
         var RTData = {};
 
-        var hit_the_server = true
-
-        
+        var hit_the_server = true;
 
         //only poll rotten tomatoes if the element is on screen
         if ($this.isOnScreen()) {
             
+            $this.hoverIntent({
+                over: onMouseOverMovie,
+                out: onMouseOutMovie
+            });
+
+
+            var onMouseOverMovie = function() {
+                if ($this.children('.rt_rating').length > 0) {
+                    setTimeout(function() {
+                        $this.children('.rt_rating').fadeOut();
+                    }, 200);
+                }
+            };
+
+            var onMouseOutMovie = function() {
+                if ($this.children('.rt_rating').length > 0) {
+                    setTimeout(function() {
+                        if($this.children('.bob-card').length < 1) {
+                            $this.children('.rt_rating').fadeIn();
+                        }
+                    }, 200);    
+                }
+            };
+
             var movieTitle = $this.find('[aria-label]').attr('aria-label');
             var movieUrl = convertTitleToUrl(movieTitle);
 
@@ -96,8 +120,8 @@ function computeRatings() {
                     if (use_local_storage) {
                         for (var j = 0; j < local_data.length; j++) {
                             if(_.contains(local_data[j], movieTitle)) {
-                                RTData = local_data[j]
-                                addRTRatings($this, RTData)
+                                RTData = local_data[j];
+                                addRTRatings($this, RTData);
                                 hit_the_server = false;
                                 break;
                             } 
@@ -109,8 +133,6 @@ function computeRatings() {
                         
                         $.getJSON(movieUrl).
                             success(function(data) {          
-
-                                console.log(data);
 
                                 // We have info from RT
                                 if (data.movies && data.movies.length > 0) {
@@ -160,12 +182,11 @@ function computeRatings() {
                     }
                 }
             }
-        };
-        
+        }
     });
     
-    setTimeout(function() { computeRatings() }, 3000);
-};
+    setTimeout(function() { computeRatings(); }, 3000);
+}
 
 function addRTRatings($element, data) {
     var $el = $element
