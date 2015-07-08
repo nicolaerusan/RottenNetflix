@@ -1,3 +1,17 @@
+NETFLIX ROTTENIZER 0.7.6
+-------------------------
+Update July 7th 2015
+
+Lots of changes since the last posted update
+
+- Name changed superficially
+- Added local caching to alleviate server load
+- Refactored the entire code base
+- Updated to work on new Netflix redesign
+
+
+=====================================================================================================
+
 ROTTEN NETFLIX v.4
 
 Update Dec 26th 2012 --
