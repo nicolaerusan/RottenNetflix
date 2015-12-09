@@ -14,45 +14,7 @@ if (TESTING) ROOT_URL = "http://localhost:9080/netflix";
 
 // ------------------ ON DOM LOAD ---------------------
 $(function() {
-
-    // depending on the page, append the rotten tomatoes info to different elems.
-    // switch ($('body').attr('id')) {
-    //     case 'page-WiHome':
-    //         bindElement = '.boxShot';
-    //         break;
-
-    //     case 'page-WiAltGenre':
-    //         bindElement = '.boxShot';
-    //         break;
-
-    //     case 'page-WiMovie':
-    //         bindElement = '.agMovie';
-    //         break;
-
-    //     case 'page-RecommendationsHome':
-    //         bindElement = '.agMovie';
-    //         break;
-
-    //     default:
-    //         bindElement = '.boxShot';
-    //         break;
-    // }
-
-    
     computeRatings(); // Initializes Rotten Tomato Ratings
-    
-    
-    // $(document).on('scroll', function(evt) {
-    //     if ($(window).scrollTop() % 200 === 0) {
-    //         computeRatings();
-    //     }
-    // });
-    
-
-    // // handle lazy loading of moviesactivated by click on next arrows for Suggested page.
-    // $('.qSlider-navNext, qSlider-navNext').click(function() {
-    //     computeRatings();
-    // });
 });
 
 chrome.storage.local.get('rotten_data', function(data) {
@@ -67,17 +29,7 @@ function computeRatings() {
 
     $('.slider-item').each(function() {
         var $this = $(this);
-        // ,   $movieLink = $this.find('a')
-        // ,   $parentEl = $this.parent()
-        // ,   $parentElClass = $parentEl.attr('class')
-        // ,   bindElementTemp = $movieLink.closest(bindElement)
-
-
-
-
-            
         var RTData = {};
-
         var hit_the_server = true;
 
         //only poll rotten tomatoes if the element is on screen
@@ -87,7 +39,9 @@ function computeRatings() {
                 over: onMouseOverMovie,
                 out: onMouseOutMovie
             });
-
+            
+            
+            // TODO: Break all of this out
 
             var onMouseOverMovie = function() {
                 if ($this.children('.rt_rating').length > 0) {
