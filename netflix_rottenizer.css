@@ -1,0 +1,86 @@
+/* Netflix overrides */
+.boxShot {position: relative;}
+#global-search-form {position: relative}
+.account-menu .submenu {z-index:9999}
+.sc-kd #global-search button, #page-KidsSearch #global-search button {top:8px!important;}
+.sc-kd #rt_filter, #page-KidsSearch #rt_filter {left: -115px;top: 7px;}
+
+/* Box Shot Ratings */
+.rt_rating{
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	left: 0px;
+	background-color: rgba(0, 0, 0, 0.5);
+	width: 100%;
+	font-size: 12px;
+	padding: 2px;
+	box-sizing: border-box;
+	color: white;
+	z-index: 13;
+	text-align: center;
+}
+
+.rt_rating:hover {text-decoration: none!important;}
+
+.rt_na {
+	font-size: 9px;
+	padding: 7px;
+	color:#AAA;
+}
+
+.rt_rating span.na {display: none}
+.icon.rt_na {display:none!important;}
+.rt_rating span {margin-right: 15px;}
+
+.rt_rating .icon{
+	display:inline-block;
+	height:16px;
+	width:16px;
+	margin-right:5px;
+}
+
+.rt_rating.percent.na {
+	display:none;
+}
+
+.rt_fresh.icon{
+	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
+	background-position: -256px -142px;
+	
+}
+.rt_rotten.icon{
+	background: url("http://images.rottentomatoescdn.com/images/redesign/icons-v2.png?v=06052011") no-repeat;
+	background-position: -272px -142px;
+}
+.icon.audience.rt_fresh {
+	background-position: -286px -143px;
+}
+.icon.audience.rt_rotten {
+	background-position: -207px -142px;
+}
+/* Styling for small Box Shot */
+.boxShot-sm .rt_rating {
+	font-size: 9px;
+	bottom: 4px;
+}
+.boxShot-sm .rt_rating span {margin-right: 5px;}
+
+/* Filter */
+#rt_filter {
+
+	line-height: 18px;
+	top: 30px;
+	color: #5E5E5E;
+	background: rgba(255, 255, 255, 0.65);
+	border: 1px solid #DADADA;
+	font-weight: bold;
+	border-radius: 3px;
+	position: absolute;
+	width: 129px;
+	font-size: 12px;
+	left: -158px;
+	padding: 5px;
+	padding-right: 10px;
+}
+#rt_filter input {margin-right: 5px;}
